@@ -1,0 +1,76 @@
+.detail-container {
+    max-width: 720px;
+    margin: 40px auto;
+    background-color: #fff;
+    padding: 40px;
+    border-radius: 12px;
+    box-shadow: 0 0 8px rgba(0, 0, 0, 0.08);
+    font-family: 'Helvetica Neue', sans-serif;
+}
+
+.title {
+    font-size: 22px;
+    font-weight: bold;
+    margin-bottom: 24px;
+    border-left: 4px solid #000;
+    padding-left: 10px;
+}
+
+.detail-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.detail-table th,
+.detail-table td {
+    padding: 12px 8px;
+    border-bottom: 1px solid #ddd;
+    vertical-align: middle;
+    font-size: 15px;
+}
+
+.detail-table th {
+    text-align: left;
+    width: 120px;
+    color: #555;
+}
+
+input[type="time"],
+textarea {
+    padding: 6px 10px;
+    font-size: 14px;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    width: 140px;
+}
+
+textarea {
+    width: 100%;
+    height: 60px;
+    resize: vertical;
+}
+
+.error {
+    color: #c00;
+    font-size: 13px;
+    margin-top: 5px;
+}
+
+.btn-wrapper {
+    text-align: right;
+    margin-top: 20px;
+}
+
+.submit-btn {
+    background-color: #000;
+    color: #fff;
+    padding: 10px 26px;
+    font-size: 16px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+}
+
+.submit-btn:hover {
+    background-color: #444;
+}

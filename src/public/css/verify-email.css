@@ -1,0 +1,90 @@
+body {
+    font-family: 'Helvetica Neue', sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #fff;
+    text-align: center;
+}
+
+.header {
+    background-color: #000;
+    padding: 12px 20px;
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+}
+
+.header img {
+    height: 32px;
+}
+
+.main {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 80vh;
+}
+
+.container {
+    max-width: 600px;
+    margin: 0 auto;
+    padding: 0 20px;
+}
+
+.message {
+    font-size: 1.1rem;
+    font-weight: bold;
+    margin-bottom: 30px;
+}
+
+.verify-button {
+    background-color: #dcdcdc;
+    border: 1px solid #999;
+    color: #000;
+    font-size: 1rem;
+    padding: 12px 32px;
+    border-radius: 6px;
+    cursor: not-allowed;
+    margin-bottom: 20px;
+}
+
+.resend {
+    margin-top: 10px;
+}
+
+.resend-link {
+    background: none;
+    border: none;
+    color: #007bff;
+    text-decoration: underline;
+    font-size: 0.9rem;
+    cursor: pointer;
+}
+
+.resend-link:hover {
+    color: #0056b3;
+}
+
+.status {
+    color: green;
+    margin-top: 10px;
+}
+
+@media screen and (min-width: 1400px) and (max-width: 1540px) {
+    .container {
+        max-width: 700px;
+    }
+
+    .message {
+        font-size: 1.3rem;
+    }
+
+    .verify-button {
+        font-size: 1.1rem;
+        padding: 14px 36px;
+    }
+
+    .resend-link {
+        font-size: 1rem;
+    }
+}
