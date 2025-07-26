@@ -107,4 +107,27 @@ class AttendanceController extends Controller
             fclose($handle);
         }, 200, $headers);
     }
+
+    public function show($id)
+    {
+        $attendance = Attendance::with('breaks', 'user')->findOrFail($id);
+        $correctionRequest = \App\Models\AttendanceCorrectRequest::where('attendance_id', $id)
+            ->where('status', 'pending')
+            ->first();
+
+        return view('attendance.show', compact('attendance', 'correctionRequest'));
+    }
+
+    public function requestList(Request $request)
+    {
+        $tab = $request->query('tab', 'pending');
+
+        $requests = AttendanceCorrectRequest::with('attendance.user')
+            ->when($tab === 'pending', fn($q) => $q->where('status', 'pending'))
+            ->when($tab === 'approved', fn($q) => $q->where('status', 'approved'))
+            ->orderByDesc('created_at')
+            ->get();
+
+        return view('stamp_correction_request.request_list', compact('requests'));
+    }
 }

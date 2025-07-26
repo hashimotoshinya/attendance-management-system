@@ -1,4 +1,4 @@
-@extends('layouts.admin_app')
+@extends('layouts.attendance_app')
 
 @section('css')
 <link rel="stylesheet" href="{{ asset('css/admin_attendance_list.css') }}">
@@ -43,7 +43,7 @@
                     <td>{{ $attendance->end_time ? $attendance->end_time->format('H:i') : '' }}</td>
                     <td>{{ $attendance->total_break_time ?? '' }}</td>
                     <td>{{ $attendance->total_work_time ?? '' }}</td>
-                    <td><a href="{{ route('admin.attendance_show', $attendance->id) }}">詳細</a></td>
+                    <td><a href="{{ route('attendance.show', $attendance->id) }}">詳細</a></td>
                 </tr>
             @empty
                 <tr><td colspan="6">該当する勤怠データはありません。</td></tr>

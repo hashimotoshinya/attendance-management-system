@@ -17,6 +17,7 @@ return new class extends Migration
             $table->date('date');
             $table->time('start_time')->nullable();
             $table->time('end_time')->nullable();
+            $table->text('note')->nullable();
             $table->string('status')->default('勤務外');
             $table->unsignedInteger('total_break_time')->nullable();
             $table->timestamps();
@@ -31,3 +32,4 @@ return new class extends Migration
         Schema::dropIfExists('attendances');
     }
 };
+

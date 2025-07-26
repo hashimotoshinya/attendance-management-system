@@ -1,7 +1,7 @@
-@extends('layouts.staff_app')
+@extends('layouts.attendance_app')
 
 @section('content')
-<link rel="stylesheet" href="{{ asset('css/stamp_correction_request.css') }}">
+<link rel="stylesheet" href="{{asset('css/stamp_correction_request.css') }}">
 
 <div class="container">
     <h1 class="title">申請一覧</h1>
@@ -32,7 +32,11 @@
                     <td>{{ $request->note }}</td>
                     <td>{{ $request->created_at->format('Y/m/d') }}</td>
                     <td>
-                        <a href="{{ route('attendance.show', $request->attendance->id) }}" class="detail-link">詳細</a>
+                        @if (session('login_type') === 'admin')
+                            <a href="{{ route('stamp_correction_request.show', $request->id) }}" class="detail-link">詳細</a>
+                        @else
+                            <a href="{{ route('attendance.show', $request->attendance->id) }}" class="detail-link">詳細</a>
+                        @endif
                     </td>
                 </tr>
                 @endforeach
@@ -61,7 +65,11 @@
                     <td>{{ $request->note }}</td>
                     <td>{{ $request->updated_at->format('Y/m/d') }}</td>
                     <td>
-                        <a href="{{ route('attendance.show', $request->attendance->id) }}" class="detail-link">詳細</a>
+                        @if (session('login_type') === 'admin')
+                            <a href="{{ route('stamp_correction_request.show', $request->id) }}" class="detail-link">詳細</a>
+                        @else
+                            <a href="{{ route('attendance.show', $request->attendance->id) }}" class="detail-link">詳細</a>
+                        @endif
                     </td>
                 </tr>
                 @endforeach

@@ -1,4 +1,4 @@
-@extends('layouts.staff_app')
+@extends('layouts.attendance_app')
 
 @section('title', '勤怠')
 

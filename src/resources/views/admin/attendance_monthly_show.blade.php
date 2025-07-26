@@ -1,4 +1,4 @@
-@extends('layouts.admin_app')
+@extends('layouts.attendance_app')
 
 @section('css')
 <link rel="stylesheet" href="{{ asset('css/monthly_show.css') }}">
@@ -49,7 +49,7 @@
                     <td>{{ $total }}</td>
                     <td>
                         @if($attendance)
-                            <a href="{{ route('admin.attendance_show', ['id' => $attendance->id]) }}" class="detail-link">詳細</a>
+                            <a href="{{ route('attendance.show', ['id' => $attendance->id]) }}" class="detail-link">詳細</a>
                         @else
                             -
                         @endif

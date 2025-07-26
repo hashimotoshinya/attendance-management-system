@@ -6,7 +6,7 @@ use Illuminate\Http\Request;
 use App\Http\Requests\UpdateAttendanceRequest;
 use App\Models\Attendance;
 use App\Models\BreakTime;
-use App\Models\AttendanceEditRequest;
+use App\Models\AttendanceCorrectRequest;
 use Illuminate\Support\Facades\Auth;
 use Carbon\Carbon;
 use Carbon\CarbonPeriod;
@@ -126,18 +126,25 @@ class AttendanceController extends Controller
     public function show($id)
     {
         $attendance = Attendance::with('breaks', 'user')->findOrFail($id);
-        $editRequest = \App\Models\AttendanceEditRequest::where('attendance_id', $id)
+
+        $correctionRequest = AttendanceCorrectRequest::where('attendance_id', $id)
             ->where('status', 'pending')
             ->first();
 
-        return view('attendance.show', compact('attendance', 'editRequest'));
+        $loginType = session('login_type');
+
+        if ($loginType === 'admin') {
+            return view('admin.attendance_show', compact('attendance', 'correctionRequest'));
+        } else {
+            return view('attendance.show', compact('attendance', 'correctionRequest'));
+        }
     }
 
     public function update(UpdateAttendanceRequest $request, $id)
     {
         $attendance = Attendance::findOrFail($id);
 
-        $existing = AttendanceEditRequest::where('attendance_id', $id)
+        $existing = AttendanceCorrectRequest::where('attendance_id', $id)
             ->where('status', 'pending')
             ->first();
 
@@ -145,7 +152,7 @@ class AttendanceController extends Controller
             return $b['start_time'] || $b['end_time'];
         });
 
-        AttendanceEditRequest::updateOrCreate(
+        AttendanceCorrectRequest::updateOrCreate(
             ['attendance_id' => $attendance->id],
             [
                 'start_time' => $request->start_time,
@@ -156,6 +163,16 @@ class AttendanceController extends Controller
             ]
         );
 
-        return redirect()->route('attendance.list')->with('status', '修正申請が送信されました（承認待ち）');
+        // login_typeに応じてリダイレクト先を分ける
+        $loginType = session('login_type');
+
+        if ($loginType === 'admin') {
+            return redirect()
+                ->route('admin.attendance.staff', ['id' => $attendance->user_id])
+                ->with('status', '修正申請が送信されました（承認待ち）');
+        }
+
+        return redirect()->route('attendance.list')
+            ->with('status', '修正申請が送信されました（承認待ち）');
     }
 }
