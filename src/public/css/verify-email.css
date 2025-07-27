@@ -44,7 +44,7 @@ body {
     font-size: 1rem;
     padding: 12px 32px;
     border-radius: 6px;
-    cursor: not-allowed;
+    cursor: pointer;
     margin-bottom: 20px;
 }
 
@@ -54,6 +54,7 @@ body {
 
 .resend-link {
     background: none;
+    margin-top: 10px;
     border: none;
     color: #007bff;
     text-decoration: underline;
@@ -68,23 +69,4 @@ body {
 .status {
     color: green;
     margin-top: 10px;
-}
-
-@media screen and (min-width: 1400px) and (max-width: 1540px) {
-    .container {
-        max-width: 700px;
-    }
-
-    .message {
-        font-size: 1.3rem;
-    }
-
-    .verify-button {
-        font-size: 1.1rem;
-        padding: 14px 36px;
-    }
-
-    .resend-link {
-        font-size: 1rem;
-    }
 }

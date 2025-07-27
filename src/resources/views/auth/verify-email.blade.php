@@ -18,8 +18,9 @@
                 登録していただいたメールアドレスに認証メールを送付しました。<br>
                 メール認証を完了してください。
             </p>
-
-            <button class="verify-button" disabled>認証はこちらから</button>
+            @env('local')
+                <a href="http://localhost:8025" class="verify-button" target="_blank">認証はこちらから</a>
+            @endenv
 
             <form method="POST" action="{{ route('verification.send') }}">
                 @csrf

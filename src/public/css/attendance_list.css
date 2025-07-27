@@ -22,15 +22,13 @@
 .month-switch .btn-month {
     margin: 0 15px;
     padding: 6px 12px;
-    background-color: #007bff;
-    color: #fff;
     border-radius: 5px;
     text-decoration: none;
     font-weight: bold;
 }
 
 .month-switch .btn-month:hover {
-    background-color: #0056b3;
+    text-decoration: underline;
 }
 
 .current-month {
@@ -65,7 +63,6 @@
 }
 
 .detail-link {
-    color: #007bff;
     text-decoration: none;
 }
 

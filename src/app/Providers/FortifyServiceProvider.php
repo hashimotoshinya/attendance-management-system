@@ -12,6 +12,8 @@ use Illuminate\Support\Facades\RateLimiter;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Str;
 use Laravel\Fortify\Fortify;
+use Laravel\Fortify\Contracts\VerifyEmailViewResponse;
+use App\Http\Responses\VerifyEmailViewResponse as CustomVerifyEmailViewResponse;
 
 class FortifyServiceProvider extends ServiceProvider
 {
@@ -43,5 +45,10 @@ class FortifyServiceProvider extends ServiceProvider
         Fortify::registerView(function () {
             return view('auth.register');
         });
+
+        $this->app->bind(
+            VerifyEmailViewResponse::class,
+            CustomVerifyEmailViewResponse::class
+        );
     }
 }

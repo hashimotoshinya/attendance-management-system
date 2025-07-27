@@ -20,7 +20,7 @@ Route::post('/admin/logout', [AdminLoginController::class, 'logout'])->name('adm
 // ==============================
 // 共通（スタッフ・管理者共用）ルート
 // ==============================
-Route::middleware(['auth'])->group(function () {
+Route::middleware(['auth', 'verified'])->group(function () {
     // 勤怠打刻処理（スタッフ用想定）
     Route::controller(AttendanceController::class)->group(function () {
         Route::get('/attendance', 'index')->name('attendance.index');
