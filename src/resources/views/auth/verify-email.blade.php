@@ -18,7 +18,7 @@
                 登録していただいたメールアドレスに認証メールを送付しました。<br>
                 メール認証を完了してください。
             </p>
-            @env('local')
+            @env('local', 'testing')
                 <a href="http://localhost:8025" class="verify-button" target="_blank">認証はこちらから</a>
             @endenv
 

@@ -8,9 +8,6 @@ use App\Models\AttendanceCorrectRequest;
 
 class AttendanceCorrectRequestController extends Controller
 {
-    /**
-     * 一覧画面表示（承認待ち・承認済）
-     */
     public function index(Request $request)
     {
         $user = Auth::user();
@@ -51,9 +48,6 @@ class AttendanceCorrectRequestController extends Controller
         ]);
     }
 
-    /**
-     * 詳細表示画面（管理者用承認前確認）
-     */
     public function show($id)
     {
         $correctionRequest = AttendanceCorrectRequest::with('attendance.user')->findOrFail($id);
@@ -64,9 +58,6 @@ class AttendanceCorrectRequestController extends Controller
         ]);
     }
 
-    /**
-     * 承認処理（PUT）
-     */
     public function approve(Request $request, $id)
     {
         $correctionRequest = AttendanceCorrectRequest::with('attendance')->findOrFail($id);
@@ -77,23 +68,31 @@ class AttendanceCorrectRequestController extends Controller
                 ->with('error', 'すでに承認済みです。');
         }
 
-        // 勤怠データ更新（例として start_time のみ）
         $attendance = $correctionRequest->attendance;
+
         if ($correctionRequest->start_time) {
             $attendance->start_time = $correctionRequest->start_time;
         }
         if ($correctionRequest->end_time) {
             $attendance->end_time = $correctionRequest->end_time;
         }
-        if ($correctionRequest->break_time) {
-            $attendance->breaks = $correctionRequest->breaks;
-        }
         if ($correctionRequest->note) {
             $attendance->note = $correctionRequest->note;
         }
         $attendance->save();
 
-        // ステータス変更
+        $attendance->breaks()->delete();
+
+        $breaks = json_decode($correctionRequest->breaks, true) ?? [];
+        foreach ($breaks as $break) {
+            if (!empty($break['start_time']) && !empty($break['end_time'])) {
+                $attendance->breaks()->create([
+                    'start_time' => $break['start_time'],
+                    'end_time' => $break['end_time'],
+                ]);
+            }
+        }
+
         $correctionRequest->status = 'approved';
         $correctionRequest->save();
 

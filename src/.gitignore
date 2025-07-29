@@ -1,15 +1,30 @@
+# Laravel
+/vendor
 /node_modules
 /public/hot
 /public/storage
 /storage/*.key
-/vendor
-.env
-.env.backup
+/storage/app/public
+/storage/debugbar
+/storage/logs
 .phpunit.result.cache
-docker-compose.override.yml
+.env
+.env.testing
+.env.backup
+
+# Docker
+docker/mysql/data/
+docker/mysql/logs/
+
+# OS/IDE
+.DS_Store
+.idea/
+.vscode/
+*.sublime-project
+*.sublime-workspace
+
+# Others
 Homestead.json
 Homestead.yaml
 npm-debug.log
 yarn-error.log
-/.idea
-/.vscode

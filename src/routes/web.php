@@ -49,7 +49,6 @@ Route::middleware(['auth'])->prefix('admin')->name('admin.')->group(function () 
         Route::get('/attendance/list', 'index')->name('attendance.list');
         Route::get('/staff/list', 'staffList')->name('attendance_staff_list');
         Route::get('/attendance/staff/{id}', 'staffAttendance')->name('attendance.staff');
-        Route::get('/attendance/{id}/detail', 'detail')->name('attendance.detail');
         Route::get('/attendance/staff/{id}/csv', 'exportCsv')->name('attendance.export_csv');
     });
 });

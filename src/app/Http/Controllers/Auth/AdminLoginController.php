@@ -21,15 +21,21 @@ class AdminLoginController extends Controller
         $credentials = $request->only('email', 'password');
         $email = $credentials['email'];
 
-        // 管理者権限のあるメールか確認
-    if (!\App\Models\AdminUser::where('email', $email)->exists()) {
-        return back()->withErrors(['email' => '管理者アカウントとして認証されていません。']);
-    }
+        $userExists = \App\Models\User::where('email', $email)->exists();
+
+        $isAdmin = \App\Models\AdminUser::where('email', $email)->exists();
+
+        if (!$userExists) {
+            return back()->withErrors(['email' => 'ログイン情報が登録されていません']);
+        }
+
+        if (!$isAdmin) {
+            return back()->withErrors(['email' => '管理者アカウントとして認証されていません']);
+        }
 
         if (Auth::attempt($credentials)) {
             session(['login_type' => 'admin']);
             $request->session()->regenerate();
-
             return redirect()->intended('/admin/attendance/list');
         }
 

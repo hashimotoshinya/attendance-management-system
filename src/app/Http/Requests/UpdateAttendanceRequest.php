@@ -29,15 +29,27 @@ class UpdateAttendanceRequest extends FormRequest
             $start = Carbon::parse($this->start_time);
             $end = Carbon::parse($this->end_time);
 
+            if ($start->greaterThanOrEqualTo($end)) {
+                $validator->errors()->add('start_time', '出勤時間は退勤時間より前にしてください');
+            }
+
             foreach ($this->breaks ?? [] as $index => $break) {
                 $bStart = isset($break['start_time']) ? Carbon::parse($break['start_time']) : null;
                 $bEnd   = isset($break['end_time']) ? Carbon::parse($break['end_time']) : null;
+
+                if ($bStart && $bStart->greaterThan($end)) {
+                    $validator->errors()->add("breaks.$index.start_time", '休憩開始時間が勤務時間外です');
+                }
+
+                if ($bEnd && $bEnd->greaterThan($end)) {
+                    $validator->errors()->add("breaks.$index.end_time", '休憩終了時間が勤務時間外です');
+                }
 
                 if ($bStart && $bStart->lessThan($start)) {
                     $validator->errors()->add("breaks.$index.start_time", '休憩開始時間が勤務時間外です');
                 }
 
-                if ($bEnd && $bEnd->greaterThan($end)) {
+                if ($bEnd && $bEnd->lessThan($start)) {
                     $validator->errors()->add("breaks.$index.end_time", '休憩終了時間が勤務時間外です');
                 }
 

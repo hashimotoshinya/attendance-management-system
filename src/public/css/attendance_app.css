@@ -27,3 +27,7 @@ body {
     cursor: pointer;
     font-size: 14px;
 }
+
+.logout-form {
+    display: inline;
+}

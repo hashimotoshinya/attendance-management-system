@@ -140,6 +140,7 @@ class AttendanceController extends Controller
         }
     }
 
+
     public function update(UpdateAttendanceRequest $request, $id)
     {
         $attendance = Attendance::findOrFail($id);
@@ -163,7 +164,6 @@ class AttendanceController extends Controller
             ]
         );
 
-        // login_typeに応じてリダイレクト先を分ける
         $loginType = session('login_type');
 
         if ($loginType === 'admin') {

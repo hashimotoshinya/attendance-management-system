@@ -18,7 +18,7 @@
         </thead>
         <tbody>
             @foreach ($users as $user)
-                @if(session('login_type') === 'admin') {{-- セッションによる制御（念のため） --}}
+                @if(session('login_type') === 'admin')
                     <tr>
                         <td>{{ $user->name }}</td>
                         <td>{{ $user->email }}</td>

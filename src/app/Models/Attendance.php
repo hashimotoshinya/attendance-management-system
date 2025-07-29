@@ -53,7 +53,7 @@ class Attendance extends Model
             return $carry;
         }, 0);
 
-        return $total > 0 ? sprintf('%d:%02d', floor($total / 60), $total % 60) : '';
+        return $total > 0 ? sprintf('%02d:%02d', floor($total / 60), $total % 60) : '';
     }
 
     public function user()

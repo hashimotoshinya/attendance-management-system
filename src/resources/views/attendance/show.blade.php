@@ -37,10 +37,10 @@
                 <th>休憩{{ $index + 1 }}</th>
                 <td>
                     <input type="time" name="breaks[{{ $index }}][start_time]"
-                        value="{{ old("breaks.$index.start_time", isset($break['start_time']) ? \Carbon\Carbon::parse($break['start_time'])->format('H:i') : '') }}">
+                        value="{{ old('breaks.$index.start_time', isset($break['start_time']) ? \Carbon\Carbon::parse($break['start_time'])->format('H:i') : '') }}">
                     〜
                     <input type="time" name="breaks[{{ $index }}][end_time]"
-                        value="{{ old("breaks.$index.end_time", isset($break['end_time']) ? \Carbon\Carbon::parse($break['end_time'])->format('H:i') : '') }}">
+                        value="{{ old('breaks.$index.end_time', isset($break['end_time']) ? \Carbon\Carbon::parse($break['end_time'])->format('H:i') : '') }}">
                     @if (isset($break['id']))
                         <input type="hidden" name="breaks[{{ $index }}][id]" value="{{ $break['id'] }}">
                     @endif
@@ -56,10 +56,10 @@
                 <th>休憩{{ $nextIndex + 1 }}</th>
                 <td>
                     <input type="time" name="breaks[{{ $nextIndex }}][start_time]" {{ $correctionRequest ? 'disabled' : '' }}
-                        value="{{ old("breaks.$nextIndex.start_time", '') }}">
+                        value="{{ old('breaks.$nextIndex.start_time', '') }}">
                     〜
                     <input type="time" name="breaks[{{ $nextIndex }}][end_time]" {{ $correctionRequest ? 'disabled' : '' }}
-                        value="{{ old("breaks.$nextIndex.end_time", '') }}">
+                        value="{{ old('breaks.$nextIndex.end_time', '') }}">
                     @error("breaks.$nextIndex.start_time") <p class="error">{{ $message }}</p> @enderror
                     @error("breaks.$nextIndex.end_time") <p class="error">{{ $message }}</p> @enderror
                 </td>
