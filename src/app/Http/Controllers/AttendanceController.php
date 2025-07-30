@@ -168,11 +168,11 @@ class AttendanceController extends Controller
 
         if ($loginType === 'admin') {
             return redirect()
-                ->route('admin.attendance.staff', ['id' => $attendance->user_id])
+                ->route('attendance.show', ['id' => $attendance->user_id])
                 ->with('status', '修正申請が送信されました（承認待ち）');
         }
 
-        return redirect()->route('attendance.list')
+        return redirect()->route('attendance.show', ['id' => $attendance->id])
             ->with('status', '修正申請が送信されました（承認待ち）');
     }
 }

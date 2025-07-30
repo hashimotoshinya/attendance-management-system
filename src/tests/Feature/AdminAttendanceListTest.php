@@ -5,12 +5,8 @@ namespace Tests\Feature;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 use App\Models\User;
-use App\Models\AdminUser;
 use App\Models\Attendance;
 use Carbon\Carbon;
-use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Facades\Session;
 
 class AdminAttendanceListTest extends TestCase
 {
@@ -24,21 +20,18 @@ class AdminAttendanceListTest extends TestCase
     {
         parent::setUp();
 
-        DB::table('users')->insert([
+        $this->admin = User::factory()->create([
             'name' => 'admin',
             'email' => 'admin@example.com',
-            'password' => Hash::make('adminadmin'),
-            'created_at' => now(),
-            'updated_at' => now(),
+            'password' => bcrypt('adminadmin'),
+            'email_verified_at' => now(),
         ]);
 
-        DB::table('admin_users')->insert([
+        \DB::table('admin_users')->insert([
             'email' => 'admin@example.com',
             'created_at' => now(),
             'updated_at' => now(),
         ]);
-
-        $this->admin = \App\Models\User::where('email', 'admin@example.com')->first();
 
         $this->user1 = User::factory()->create(['name' => '佐藤']);
         $this->user2 = User::factory()->create(['name' => '鈴木']);
@@ -74,8 +67,8 @@ class AdminAttendanceListTest extends TestCase
 
     private function actingAsAdmin()
     {
-        Session::put('login_type', 'admin');
-        return $this->actingAs($this->admin);
+        return $this->actingAs($this->admin)
+            ->withSession(['login_type' => 'admin']);
     }
 
     public function test_admin_can_see_today_attendance_list_with_correct_values()

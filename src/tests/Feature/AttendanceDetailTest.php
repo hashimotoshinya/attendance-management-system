@@ -13,7 +13,7 @@ class AttendanceDetailTest extends TestCase
 {
     use RefreshDatabase;
 
-    public function test_attendance_detail_displays_correct_user_name_and_date_and_times()
+    public function test_attendance_show_displays_correct_user_name_and_date_and_times()
     {
         $user = User::factory()->create(['name' => '山田 太郎']);
         $attendanceDate = Carbon::parse('2024-05-10');

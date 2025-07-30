@@ -5,13 +5,9 @@
     <title>勤怠管理</title>
     <link rel="stylesheet" href="{{ asset('css/sanitize.css') }}" />
     <link rel="stylesheet" href="{{ asset('css/attendance_app.css') }}">
-
-    {{-- login_type でCSS切り替え --}}
     @php
-        $loginType = session('login_type'); // 'admin' or 'staff'
+        $loginType = session('login_type');
     @endphp
-
-    
 
     @yield('css')
 </head>
@@ -32,9 +28,7 @@
                     <button type="submit">ログアウト</button>
                 </form>
             @elseif ($loginType === 'staff')
-                {{-- スタッフのステータスによって「勤怠」リンクを出し分ける --}}
                 @php
-                    // $status が View に渡されている前提
                     $status = $status ?? null;
                 @endphp
 

@@ -121,7 +121,7 @@ class AdminUserAndAttendanceTest extends TestCase
         $response->assertSee($attendance->start_time->format('H:i'));
     }
 
-    public function test_admin_can_access_attendance_detail_page_from_list()
+    public function test_admin_can_access_attendance_show_page_from_list()
     {
         $user = User::factory()->create();
         $attendance = Attendance::factory()->create([

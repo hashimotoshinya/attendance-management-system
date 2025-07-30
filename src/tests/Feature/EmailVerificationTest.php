@@ -14,9 +14,6 @@ class EmailVerificationTest extends TestCase
 {
     use RefreshDatabase;
 
-    /**
-     * 会員登録後、認証メールが送信される
-     */
     public function test_verification_email_is_sent_after_registration()
     {
         Notification::fake();
@@ -35,22 +32,18 @@ class EmailVerificationTest extends TestCase
     }
 
     public function test_verification_page_has_mailhog_link_in_local(): void
-{
-    $user = User::factory()->create([
-        'email_verified_at' => null,
-    ]);
+    {
+        $user = User::factory()->create([
+            'email_verified_at' => null,
+        ]);
 
-    $response = $this->actingAs($user)
-        ->get('/email/verify');
+        $response = $this->actingAs($user)
+            ->get('/email/verify');
 
-    $response->assertStatus(200);
+        $response->assertStatus(200);
 
-    // リンクの一部ではなく、aタグ全体を対象にする
-    $response->assertSee('<a href="http://localhost:8025" class="verify-button" target="_blank">認証はこちらから</a>', false);
-}
-    /**
-     * メール認証を完了すると勤怠登録画面に遷移する
-     */
+        $response->assertSee('<a href="http://localhost:8025" class="verify-button" target="_blank">認証はこちらから</a>', false);
+    }
     public function test_email_verification_redirects_to_attendance_page()
     {
         Event::fake();
@@ -69,6 +62,6 @@ class EmailVerificationTest extends TestCase
 
         Event::assertDispatched(Verified::class);
         $this->assertNotNull($user->fresh()->email_verified_at);
-        $response->assertRedirect('/attendance?verified=1'); // 勤怠登録画面にリダイレクトされる想定
+        $response->assertRedirect('/attendance?verified=1');
     }
 }

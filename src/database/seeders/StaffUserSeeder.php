@@ -19,6 +19,7 @@ class StaffUserSeeder extends Seeder
                 'name' => 'staff',
                 'email' => 'staff@example.com',
                 'password' => Hash::make('staffstaff'),
+                'email_verified_at' => now(),
                 'created_at' => now(),
                 'updated_at' => now(),
             ]

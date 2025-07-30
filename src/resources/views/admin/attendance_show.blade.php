@@ -32,7 +32,7 @@
                 </td>
             </tr>
 
-            @foreach (old('breaks', $attendance->breaks->toArray()) as $index => $break)
+            @foreach (old('breaks', $attendance->breaks ?? []) as $index => $break)
             <tr>
                 <th>休憩{{ $index + 1 }}</th>
                 <td>

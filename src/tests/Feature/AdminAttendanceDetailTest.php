@@ -32,7 +32,7 @@ class AdminAttendanceDetailTest extends TestCase
         Session::put('login_type', 'admin');
     }
 
-    public function test_admin_can_view_attendance_detail()
+    public function test_admin_can_view_attendance_show()
     {
         $user = User::factory()->create();
         $attendance = Attendance::factory()->create(['user_id' => $user->id]);
@@ -95,7 +95,7 @@ class AdminAttendanceDetailTest extends TestCase
                 ],
             ]);
 
-        $response->assertRedirect(route('admin.attendance.staff', ['id' => $user->id]));
+        $response->assertRedirect(route('attendance.show', ['id' => $user->id]));
         $this->assertDatabaseHas('attendance_correct_requests', [
             'attendance_id' => $attendance->id,
             'note'          => 'Meeting delay',
