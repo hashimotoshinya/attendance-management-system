@@ -93,9 +93,9 @@ class AdminCorrectionRequestTest extends TestCase
             'start_time' => '10:00:00',
             'end_time' => '19:00:00',
             'note' => '修正内容',
-            'breaks' => json_encode([
+            'breaks' => [
                 ['start_time' => '12:00:00', 'end_time' => '13:00:00'],
-            ]),
+            ],
         ]);
 
         $response = $this->withSession(['login_type' => 'admin'])

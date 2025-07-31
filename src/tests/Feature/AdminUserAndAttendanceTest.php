@@ -52,6 +52,8 @@ class AdminUserAndAttendanceTest extends TestCase
 
     public function test_admin_can_see_selected_user_attendance_list()
     {
+        Carbon::setTestNow(Carbon::create(2025, 8, 15));
+
         $user = User::factory()->create([
             'name' => 'テスト太郎',
             'email' => 'test@example.com',
@@ -59,9 +61,9 @@ class AdminUserAndAttendanceTest extends TestCase
 
         $attendance = Attendance::factory()->create([
             'user_id' => $user->id,
-            'date' => Carbon::create(2025, 7, 29),
-            'start_time' => Carbon::create(2025, 7, 29, 9, 0),
-            'end_time' => Carbon::create(2025, 7, 29, 18, 0),
+            'date' => Carbon::create(2025, 8, 29),
+            'start_time' => Carbon::create(2025, 8, 29, 9, 0),
+            'end_time' => Carbon::create(2025, 8, 29, 18, 0),
         ]);
 
         $response = $this->withSession(['login_type' => 'admin'])
@@ -71,11 +73,14 @@ class AdminUserAndAttendanceTest extends TestCase
         $response->assertSee($user->name);
         $response->assertSee($attendance->start_time->format('H:i'));
         $response->assertSee($attendance->end_time->format('H:i'));
+
         $weekdayMap = ['日', '月', '火', '水', '木', '金', '土'];
         $date = Carbon::parse($attendance->date);
         $weekday = $weekdayMap[$date->dayOfWeek];
         $formattedDate = $date->format('m/d') . "($weekday)";
         $response->assertSee($formattedDate);
+
+        Carbon::setTestNow();
     }
 
     public function test_admin_can_view_previous_month_attendance()

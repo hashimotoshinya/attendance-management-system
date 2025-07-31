@@ -95,7 +95,7 @@ class AdminAttendanceDetailTest extends TestCase
                 ],
             ]);
 
-        $response->assertRedirect(route('attendance.show', ['id' => $user->id]));
+        $response->assertRedirect(route('admin.attendance.list', ['id' => $user->id]));
         $this->assertDatabaseHas('attendance_correct_requests', [
             'attendance_id' => $attendance->id,
             'note'          => 'Meeting delay',

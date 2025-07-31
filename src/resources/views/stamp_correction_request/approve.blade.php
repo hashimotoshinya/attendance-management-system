@@ -12,7 +12,7 @@
         <table class="detail-table">
             <tr>
                 <th>名前</th>
-                <td>{{ $correctionRequest->attendance->user->name }}</td>
+                <td>{{ $correctionRequest->attendance->user->name ?? '' }}</td>
             </tr>
             <tr>
                 <th>日付</th>
@@ -33,11 +33,13 @@
             </tr>
 
             @php
-                $breaks = json_decode($correctionRequest->break_time, true);
-                $hasCorrectionBreaks = is_array($breaks) && count($breaks) > 0;
+                $correctionBreaks = $correctionRequest->breaks;
+                $hasCorrectionBreaks = is_array($correctionBreaks) && count($correctionBreaks) > 0;
 
-                if (!$hasCorrectionBreaks) {
-                    $breaks = $correctionRequest->attendance->breaks->map(function($b) {
+                if ($hasCorrectionBreaks) {
+                    $breaks = $correctionBreaks;
+                } else {
+                    $breaks = $correctionRequest->attendance->breaks->map(function ($b) {
                         return [
                             'start_time' => $b->start_time,
                             'end_time' => $b->end_time,
@@ -65,7 +67,6 @@
             </tr>
             @endforeach
 
-            {{-- 備考 --}}
             <tr>
                 <th>備考</th>
                 <td>
@@ -76,13 +77,13 @@
     </div>
 
     @if ($correctionRequest->status === 'approved')
-    <button class="submit-btn approved-btn" disabled>修正済み</button>
-@else
-    <form action="{{ route('stamp_correction_request.approve', $correctionRequest->id) }}" method="POST">
-        @csrf
-        @method('PUT')
-        <button type="submit" class="submit-btn">承認する</button>
-    </form>
-@endif
+        <button class="submit-btn approved-btn" disabled>承認済み</button>
+    @else
+        <form action="{{ route('stamp_correction_request.approve', $correctionRequest->id) }}" method="POST">
+            @csrf
+            @method('PUT')
+            <button type="submit" class="submit-btn">承認する</button>
+        </form>
+    @endif
 </div>
 @endsection

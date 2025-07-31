@@ -25,22 +25,18 @@ class AdminLoginController extends Controller
 
         $user = User::where('email', $email)->first();
 
-        // ユーザーが存在しない
         if (!$user) {
             return back()->withErrors(['email' => 'ログイン情報が登録されていません']);
         }
 
-        // 管理者ではない
         if (!AdminUser::where('email', $email)->exists()) {
             return back()->withErrors(['email' => '管理者アカウントとして認証されていません']);
         }
 
-        // メール未認証
         if (is_null($user->email_verified_at)) {
             return back()->withErrors(['email' => 'メール認証が完了していません']);
         }
 
-        // 認証処理
         if (Auth::attempt($credentials)) {
             session(['login_type' => 'admin']);
             $request->session()->regenerate();

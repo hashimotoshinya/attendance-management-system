@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Attendance;
 use App\Models\User;
+use App\Models\AttendanceCorrectRequest;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Response;
 use Symfony\Component\HttpFoundation\StreamedResponse;
@@ -111,11 +112,12 @@ class AttendanceController extends Controller
     public function show($id)
     {
         $attendance = Attendance::with('breaks', 'user')->findOrFail($id);
-        $correctionRequest = \App\Models\AttendanceCorrectRequest::where('attendance_id', $id)
+
+        $correctionRequest = AttendanceCorrectRequest::where('attendance_id', $id)
             ->where('status', 'pending')
             ->first();
 
-        return view('attendance.show', compact('attendance', 'correctionRequest'));
+        return view('admin.attendance_show', compact('attendance', 'correctionRequest'));
     }
 
     public function requestList(Request $request)

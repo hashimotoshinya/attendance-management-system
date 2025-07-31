@@ -19,57 +19,81 @@
                 <th>日付</th>
                 <td>{{ \Carbon\Carbon::parse($attendance->date)->format('Y年n月j日') }}</td>
             </tr>
+
             <tr>
                 <th>出勤・退勤</th>
                 <td>
-                    <input type="time" name="start_time"
-                        value="{{ old('start_time', $attendance->start_time ? \Carbon\Carbon::parse($attendance->start_time)->format('H:i') : '') }}">
-                    〜
-                    <input type="time" name="end_time"
-                        value="{{ old('end_time', $attendance->end_time ? \Carbon\Carbon::parse($attendance->end_time)->format('H:i') : '') }}">
-                    @error('start_time') <p class="error">{{ $message }}</p> @enderror
-                    @error('end_time') <p class="error">{{ $message }}</p> @enderror
+                    @if (!$correctionRequest)
+                        <input type="time" name="start_time"
+                            value="{{ old('start_time', $attendance->start_time ? \Carbon\Carbon::parse($attendance->start_time)->format('H:i') : '') }}">
+                        〜
+                        <input type="time" name="end_time"
+                            value="{{ old('end_time', $attendance->end_time ? \Carbon\Carbon::parse($attendance->end_time)->format('H:i') : '') }}">
+                        @error('start_time') <p class="error">{{ $message }}</p> @enderror
+                        @error('end_time') <p class="error">{{ $message }}</p> @enderror
+                    @else
+                        {{ \Carbon\Carbon::parse($attendance->start_time)->format('H:i') }}
+                        〜
+                        {{ \Carbon\Carbon::parse($attendance->end_time)->format('H:i') }}
+                    @endif
                 </td>
             </tr>
 
-            @foreach (old('breaks', $attendance->breaks ?? []) as $index => $break)
+            @php
+                $breaks = old('breaks')
+                    ?? ($correctionRequest ? $correctionRequest->breaks : ($attendance->breaks->toArray() ?? []));
+
+                if (!is_array($breaks) || empty($breaks)) {
+                    $breaks = [];
+                }
+            @endphp
+
+            @foreach ($breaks as $index => $break)
             <tr>
                 <th>休憩{{ $index + 1 }}</th>
                 <td>
-                    <input type="time" name="breaks[{{ $index }}][start_time]"
-                        value="{{ old('breaks.$index.start_time', isset($break['start_time']) ? \Carbon\Carbon::parse($break['start_time'])->format('H:i') : '') }}">
-                    〜
-                    <input type="time" name="breaks[{{ $index }}][end_time]"
-                        value="{{ old('breaks.$index.end_time', isset($break['end_time']) ? \Carbon\Carbon::parse($break['end_time'])->format('H:i') : '') }}">
-                    @if (isset($break['id']))
-                        <input type="hidden" name="breaks[{{ $index }}][id]" value="{{ $break['id'] }}">
+                    @if (!$correctionRequest)
+                        <input type="time" name="breaks[{{ $index }}][start_time]"
+                            value="{{ old("breaks.$index.start_time", isset($break['start_time']) ? \Carbon\Carbon::parse($break['start_time'])->format('H:i') : '') }}">
+                        〜
+                        <input type="time" name="breaks[{{ $index }}][end_time]"
+                            value="{{ old("breaks.$index.end_time", isset($break['end_time']) ? \Carbon\Carbon::parse($break['end_time'])->format('H:i') : '') }}">
+                        @error("breaks.$index.start_time") <p class="error">{{ $message }}</p> @enderror
+                        @error("breaks.$index.end_time") <p class="error">{{ $message }}</p> @enderror
+                    @else
+                        {{ \Carbon\Carbon::parse($break['start_time'])->format('H:i') }}
+                        〜
+                        {{ \Carbon\Carbon::parse($break['end_time'])->format('H:i') }}
                     @endif
-
-                    @error("breaks.$index.start_time") <p class="error">{{ $message }}</p> @enderror
-                    @error("breaks.$index.end_time") <p class="error">{{ $message }}</p> @enderror
                 </td>
             </tr>
             @endforeach
 
-            @php $nextIndex = count(old('breaks', $attendance->breaks->toArray())) @endphp
-            <tr>
-                <th>休憩{{ $nextIndex + 1 }}</th>
-                <td>
-                    <input type="time" name="breaks[{{ $nextIndex }}][start_time]" {{ $correctionRequest ? 'disabled' : '' }}
-                        value="{{ old('breaks.$nextIndex.start_time', '') }}">
-                    〜
-                    <input type="time" name="breaks[{{ $nextIndex }}][end_time]" {{ $correctionRequest ? 'disabled' : '' }}
-                        value="{{ old('breaks.$nextIndex.end_time', '') }}">
-                    @error("breaks.$nextIndex.start_time") <p class="error">{{ $message }}</p> @enderror
-                    @error("breaks.$nextIndex.end_time") <p class="error">{{ $message }}</p> @enderror
-                </td>
-            </tr>
+            @if (!$correctionRequest)
+                @php $nextIndex = count(old('breaks', $attendance->breaks ?? [])) @endphp
+                <tr>
+                    <th>休憩{{ $nextIndex + 1 }}</th>
+                    <td>
+                        <input type="time" name="breaks[{{ $nextIndex }}][start_time]"
+                            value="{{ old("breaks.$nextIndex.start_time", '') }}">
+                        〜
+                        <input type="time" name="breaks[{{ $nextIndex }}][end_time]"
+                            value="{{ old("breaks.$nextIndex.end_time", '') }}">
+                        @error("breaks.$nextIndex.start_time") <p class="error">{{ $message }}</p> @enderror
+                        @error("breaks.$nextIndex.end_time") <p class="error">{{ $message }}</p> @enderror
+                    </td>
+                </tr>
+            @endif
 
             <tr>
                 <th>備考</th>
                 <td>
-                    <textarea name="note" {{ $correctionRequest ? 'disabled' : '' }}>{{ old('note', $attendance->note) }}</textarea>
-                    @error('note') <p class="error">{{ $message }}</p> @enderror
+                    @if (!$correctionRequest)
+                        <textarea name="note">{{ old('note', $attendance->note) }}</textarea>
+                        @error('note') <p class="error">{{ $message }}</p> @enderror
+                    @else
+                        {{ $attendance->note }}
+                    @endif
                 </td>
             </tr>
         </table>
@@ -78,9 +102,7 @@
             <div class="btn-wrapper">
                 <button type="submit" class="submit-btn">修正</button>
             </div>
-        @endif
-
-        @if ($correctionRequest)
+        @else
             <p class="error" style="color: red; font-weight: bold;">
                 ※承認待ちのため修正はできません。
             </p>

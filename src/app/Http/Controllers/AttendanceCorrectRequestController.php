@@ -83,7 +83,10 @@ class AttendanceCorrectRequestController extends Controller
 
         $attendance->breaks()->delete();
 
-        $breaks = json_decode($correctionRequest->breaks, true) ?? [];
+        $breaks = $correctionRequest->breaks;
+        if (!is_array($breaks) || empty($breaks)) {
+            $breaks = [];
+        }
         foreach ($breaks as $break) {
             if (!empty($break['start_time']) && !empty($break['end_time'])) {
                 $attendance->breaks()->create([

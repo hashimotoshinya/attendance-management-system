@@ -131,15 +131,20 @@ class AttendanceController extends Controller
             ->where('status', 'pending')
             ->first();
 
-        $loginType = session('login_type');
-
-        if ($loginType === 'admin') {
-            return view('admin.attendance_show', compact('attendance', 'correctionRequest'));
+        if ($correctionRequest) {
+            $attendance->start_time = $correctionRequest->start_time;
+            $attendance->end_time   = $correctionRequest->end_time;
+            $attendance->note       = $correctionRequest->note;
+            $attendance->breaks     = is_array($correctionRequest->breaks)
+                ? $correctionRequest->breaks
+                : [];
+            $attendance->is_pending = true;
         } else {
-            return view('attendance.show', compact('attendance', 'correctionRequest'));
+            $attendance->is_pending = false;
         }
-    }
 
+        return view('attendance.show', compact('attendance', 'correctionRequest'));
+    }
 
     public function update(UpdateAttendanceRequest $request, $id)
     {
@@ -159,7 +164,7 @@ class AttendanceController extends Controller
                 'start_time' => $request->start_time,
                 'end_time'   => $request->end_time,
                 'note'    => $request->note,
-                'breaks'     => json_encode($breaks),
+                'breaks'     => array_values($breaks),
                 'status'     => 'pending',
             ]
         );
@@ -168,7 +173,7 @@ class AttendanceController extends Controller
 
         if ($loginType === 'admin') {
             return redirect()
-                ->route('attendance.show', ['id' => $attendance->user_id])
+                ->route('admin.attendance.list', ['id' => $attendance->user_id])
                 ->with('status', '修正申請が送信されました（承認待ち）');
         }
 

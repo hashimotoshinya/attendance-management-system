@@ -147,5 +147,12 @@ class AttendanceCorrectionTest extends TestCase
             ->get(route('attendance.show', $request->attendance_id))
             ->assertStatus(200)
             ->assertSee($this->user->name);
+
+        $admin = User::factory()->create(['email' => 'admin@example.com']);
+        $this->actingAs($admin)
+            ->withSession(['login_type' => 'admin'])
+            ->get(route('stamp_correction_request.show', $request->id))
+            ->assertStatus(200)
+            ->assertSee($this->user->name);
     }
 }
